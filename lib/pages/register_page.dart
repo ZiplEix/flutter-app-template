@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/services/auth_service.dart';
 import 'package:flutter_app_template/widgets/auth_widgets/auth_auth_methode.dart';
@@ -6,12 +5,12 @@ import 'package:flutter_app_template/widgets/auth_widgets/auth_submit_button.dar
 import 'package:flutter_app_template/widgets/auth_widgets/auth_text_field.dart';
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({
+  const RegisterPage({
     super.key,
     required this.onTap,
   });
 
-  void Function()? onTap;
+  final void Function()? onTap;
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -22,44 +21,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordCointroller = TextEditingController();
   final TextEditingController confirmPasswordCointroller =
       TextEditingController();
-
-  void showErrorMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(message),
-        );
-      },
-    );
-  }
-
-  void registerUser() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-
-    if (passwordCointroller.text != confirmPasswordCointroller.text) {
-      Navigator.pop(context);
-      showErrorMessage("Passwords don't match");
-      return;
-    }
-
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailCointroller.text,
-        password: passwordCointroller.text,
-      );
-
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      showErrorMessage(e.code);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +70,15 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 50),
 
                 //sign in Button
-                AuthSubmitButton(text: "Register", onTap: registerUser),
+                AuthSubmitButton(
+                  text: "Register",
+                  onTap: () => AuthService().noServices.registerUser(
+                        context,
+                        emailCointroller.text,
+                        passwordCointroller.text,
+                        confirmPasswordCointroller.text,
+                      ),
+                ),
                 const SizedBox(height: 50),
 
                 // continue with
@@ -150,7 +119,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     // SizedBox(width: 100),
                     AuthAuthWith(
-                      onTap: () => AuthService().signInWithGoogle(),
+                      onTap: () =>
+                          AuthService().google.signInWithGoogle(context),
                       imagePath: "assets/google.png",
                     ),
                   ],
@@ -180,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -18,7 +19,33 @@ class HomePage extends StatelessWidget {
           IconButton(onPressed: signOut, icon: const Icon(Icons.logout))
         ],
       ),
-      body: Text("Logged in as : ${user.email}"),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Logged in as : ${user.email}"),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(user.uid)
+                    .update({"something": "something"});
+              },
+              child: const Text("Add something to firestore"),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+                onPressed: () {
+                  FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(user.uid)
+                      .delete();
+                },
+                child: const Text("remove user data")),
+          ],
+        ),
+      ),
     );
   }
 }

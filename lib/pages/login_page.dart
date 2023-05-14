@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/services/auth_service.dart';
 import 'package:flutter_app_template/widgets/auth_widgets/auth_auth_methode.dart';
@@ -6,12 +5,12 @@ import 'package:flutter_app_template/widgets/auth_widgets/auth_submit_button.dar
 import 'package:flutter_app_template/widgets/auth_widgets/auth_text_field.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({
+  const LoginPage({
     super.key,
     required this.onTap,
   });
 
-  void Function()? onTap;
+  final void Function()? onTap;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -19,39 +18,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailCointroller = TextEditingController();
-
   final TextEditingController passwordCointroller = TextEditingController();
-
-  void showErrorMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(message),
-        );
-      },
-    );
-  }
-
-  void signInUser() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailCointroller.text,
-        password: passwordCointroller.text,
-      );
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      showErrorMessage(e.code);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +76,14 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 25),
 
                 //sign in Button
-                AuthSubmitButton(text: "Sign In", onTap: signInUser),
+                AuthSubmitButton(
+                  text: "Sign In",
+                  onTap: () => AuthService().noServices.logInUser(
+                        context,
+                        emailCointroller.text,
+                        passwordCointroller.text,
+                      ),
+                ),
                 const SizedBox(height: 50),
 
                 // continue with
@@ -150,7 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     // SizedBox(width: 100),
                     AuthAuthWith(
-                      onTap: () => AuthService().signInWithGoogle(),
+                      onTap: () =>
+                          AuthService().google.signInWithGoogle(context),
                       imagePath: "assets/google.png",
                     ),
                   ],
