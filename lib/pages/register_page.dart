@@ -54,6 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 AuthTextField(
                   controller: emailCointroller,
                   hintText: "Email",
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 10),
                 AuthTextField(

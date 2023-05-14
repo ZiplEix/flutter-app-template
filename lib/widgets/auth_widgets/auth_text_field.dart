@@ -6,11 +6,13 @@ class AuthTextField extends StatelessWidget {
     required this.controller,
     required this.hintText,
     this.password = false,
+    this.keyboardType = TextInputType.text,
   });
 
   final TextEditingController controller;
   final String hintText;
   final bool password;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,7 @@ class AuthTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         obscureText: password,
+        keyboardType: keyboardType,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),

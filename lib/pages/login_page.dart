@@ -52,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                 AuthTextField(
                   controller: emailCointroller,
                   hintText: "Email",
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 10),
                 AuthTextField(
